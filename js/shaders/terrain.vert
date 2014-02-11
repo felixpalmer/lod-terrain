@@ -5,13 +5,17 @@ varying vec3 vPosition;
 varying vec2 vUv;
 
 float getHeight(vec3 p) {
-  float h = 10.0 * texture2D(uHeightData, p.xy / 100.0).a;
+  // Assume a 1024x1024 world
+  float h = 100.0 * texture2D(uHeightData, p.xy / 1024.0).a;
+  //h += 10.0 * texture2D(uHeightData, p.xy / 64.0).a;
+  //h += 5.0 * texture2D(uHeightData, p.xy / 4.0).a;
   return h;
 }
 
 vec3 getNormal() {
-  // Get 2 vectors perpendicular to the unperturbed normal, and create at point at each (relatvie to position)
-  float delta = 0.01;
+  // Get 2 vectors perpendicular to the unperturbed normal, and create at point at each (relative to position)
+  //float delta = 1024.0 / 4.0;
+  float delta = 1.0;
   vec3 dA = delta * normalize(cross(normal.yzx, normal));
   vec3 dB = delta * normalize(cross(dA, normal));
   vec3 p = position;

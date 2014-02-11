@@ -43,6 +43,10 @@ vec3 getNormal() {
 
 void main() {
   vPosition = uScale * position + vec3(uOffset, 0.0) + uGlobalOffset;
+  // Snap to grid
+  float grid = uScale / 64.0;
+  vPosition = grid * floor(vPosition / grid);
+
   vPosition = vPosition + normal * getHeight(vPosition);
   vNormal = getNormal();
   vUv = uv;

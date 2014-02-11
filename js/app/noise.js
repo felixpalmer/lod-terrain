@@ -1,6 +1,6 @@
 define( ["three", "ImprovedNoise"], function ( THREE, ImprovedNoise ) {
   // Create noise and save it to texture
-  var width = 512;
+  var width = 1024;
   var size = width * width;
   var data = new Uint8Array( size );
 

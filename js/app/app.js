@@ -6,14 +6,20 @@ function ( THREE, camera, controls, geometry, light, material, renderer, scene )
       var tileSize = 32;
       var worldWidth = 1024;
       var n = worldWidth / tileSize;
-      for ( var i = 0; i < n; i++ ) {
-        for ( var j = 0; j < n; j++ ) {
-          var plane = new THREE.Mesh( geometry.plane, material.terrain() );
-          plane.material.uniforms.uOffset.value.x = tileSize * i;
-          plane.material.uniforms.uOffset.value.y = tileSize * j;
-          plane.material.uniforms.uScale.value = tileSize;
-          scene.add( plane );
-        }
+
+      var createTile = function ( x, y, scale ) {
+        var plane = new THREE.Mesh( geometry.plane, material.terrain() );
+        plane.material.uniforms.uOffset.value.x = x;
+        plane.material.uniforms.uOffset.value.y = y;
+        plane.material.uniforms.uScale.value = scale;
+        scene.add( plane );
+      };
+
+      createTile( 0, 0, 1 );
+      for ( var scale = 1; scale < worldWidth; scale *= 2 ) {
+        createTile( 0, scale, scale );
+        createTile( scale, scale, scale );
+        createTile( scale, 0, scale );
       }
     },
     animate: function () {

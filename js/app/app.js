@@ -1,11 +1,10 @@
 define( ["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene"],
 function ( THREE, camera, controls, geometry, light, material, renderer, scene ) {
   var app = {
+    clock: new THREE.Clock(),
     init: function () {
 
-      var tileSize = 32;
       var worldWidth = 1024;
-      var n = worldWidth / tileSize;
 
       var createTile = function ( x, y, scale ) {
         var plane = new THREE.Mesh( geometry.plane, material.terrain() );
@@ -24,7 +23,11 @@ function ( THREE, camera, controls, geometry, light, material, renderer, scene )
     },
     animate: function () {
       window.requestAnimationFrame( app.animate );
-      controls.update();
+      //controls.update( app.clock.getDelta() );
+      var time = app.clock.getElapsedTime();  
+      camera.position.x = 100 * Math.cos( time / 3 ) + 200;
+      camera.position.y = 100 * Math.sin( time / 3 ) + 200;
+      camera.lookAt( new THREE.Vector3( 25, 25, 0 ) );
       renderer.render( scene, camera );
     }
   };

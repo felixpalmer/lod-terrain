@@ -8,6 +8,8 @@ define( ["three"], function ( THREE ) {
   }
 
   var noise = new THREE.DataTexture( data, width, width, THREE.AlphaFormat );
+  noise.wrapS = THREE.RepeatWrapping;
+  noise.wrapT = THREE.RepeatWrapping;
   noise.needsUpdate = true;
   return noise;
 } );

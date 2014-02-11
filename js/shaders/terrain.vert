@@ -1,4 +1,6 @@
 uniform sampler2D uHeightData;
+uniform float uScale;
+uniform vec2 uOffset;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
@@ -15,15 +17,15 @@ float getHeight(vec3 p) {
 vec3 getNormal() {
   // Get 2 vectors perpendicular to the unperturbed normal, and create at point at each (relative to position)
   //float delta = 1024.0 / 4.0;
-  float delta = 1.0;
+  float delta = 32.0 / uScale;
   vec3 dA = delta * normalize(cross(normal.yzx, normal));
   vec3 dB = delta * normalize(cross(dA, normal));
-  vec3 p = position;
-  vec3 pA = position + dA;
-  vec3 pB = position + dB;
+  vec3 p = vPosition;
+  vec3 pA = vPosition + dA;
+  vec3 pB = vPosition + dB;
 
   // Now get the height at those points
-  float h = getHeight(position);
+  float h = getHeight(vPosition);
   float hA = getHeight(pA);
   float hB = getHeight(pB);
 
@@ -35,7 +37,8 @@ vec3 getNormal() {
 }
 
 void main() {
-  vPosition = position + normal * getHeight(position);
+  vPosition = uScale * position + vec3(uOffset, 0.0);
+  vPosition = vPosition + normal * getHeight(vPosition);
   vNormal = getNormal();
   vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(vPosition, 1.0);

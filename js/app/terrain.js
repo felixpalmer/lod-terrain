@@ -44,7 +44,7 @@ define( ["three", "geometry", "material"], function ( THREE, geometry, material 
       // 2 tiles 'missing' here are in previous layer
       this.createTile( 0, scale, scale, Edge.TOP );
 
-      this.createTile( scale, -2 * scale, scale, Edge.BOTTOM | Edge.Right );
+      this.createTile( scale, -2 * scale, scale, Edge.BOTTOM | Edge.RIGHT );
       this.createTile( scale, -scale, scale, Edge.RIGHT );
       this.createTile( scale, 0, scale, Edge.RIGHT );
       this.createTile( scale, scale, scale, Edge.TOP | Edge.RIGHT );

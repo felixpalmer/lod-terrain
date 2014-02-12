@@ -18,7 +18,7 @@ function ( THREE, camera, controls, geometry, material, renderer, scene, Terrain
     animate: function () {
       window.requestAnimationFrame( app.animate );
       //controls.update( app.clock.getDelta() );
-      var time = app.clock.getElapsedTime();
+      var time = 0.3 * app.clock.getElapsedTime();
       camera.position.x = 450 * Math.cos( time / 3 ) + 200;
       camera.position.y = 250 * Math.sin( time / 4 ) + 200;
       camera.lookAt( new THREE.Vector3( 25, 25, 0 ) );

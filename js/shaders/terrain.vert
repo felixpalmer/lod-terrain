@@ -5,10 +5,10 @@ uniform float uScale;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
+varying float vMorphFactor;
 
 // Number of vertices along edge of tile
 #define TILE_RESOLUTION 128.0
-float morphFactor = 0.0;
 
 float getHeight(vec3 p) {
   // Assume a 1024x1024 world
@@ -28,7 +28,7 @@ float getHeight(vec3 p) {
 vec3 getNormal() {
   // Get 2 vectors perpendicular to the unperturbed normal, and create at point at each (relative to position)
   //float delta = 1024.0 / 4.0;
-  float delta = (morphFactor + 1.0) * uScale / TILE_RESOLUTION;
+  float delta = (vMorphFactor + 1.0) * uScale / TILE_RESOLUTION;
   vec3 dA = delta * normalize(cross(normal.yzx, normal));
   vec3 dB = delta * normalize(cross(dA, normal));
   vec3 p = vPosition;
@@ -53,7 +53,7 @@ void main() {
   // Morph factor tells us how close we are to next level.
   // 0.0 is this level
   // 1.0 is next level
-  morphFactor = calculateMorph(position);
+  vMorphFactor = calculateMorph(position);
 
   // Move into correct place
   vPosition = uScale * position + vec3(uOffset, 0.0) + uGlobalOffset;
@@ -63,13 +63,13 @@ void main() {
   vPosition = floor(vPosition / grid) * grid;
 
   // Morph between zoom layers
-  if( morphFactor > 0.0 ) {
+  if( vMorphFactor > 0.0 ) {
     // Get position that we would have if we were on higher level grid
     grid = 2.0 * grid;
     vec3 position2 = floor(vPosition / grid) * grid;
 
     // Linearly interpolate the two, depending on morph factor
-    vPosition = mix(vPosition, position2, morphFactor);
+    vPosition = mix(vPosition, position2, vMorphFactor);
   }
 
   // Get height and calculate normal

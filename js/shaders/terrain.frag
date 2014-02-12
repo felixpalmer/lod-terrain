@@ -1,5 +1,6 @@
 uniform float uScale;
 
+varying float vMorphFactor;
 varying vec3 vNormal;
 varying vec3 vPosition;
 
@@ -10,6 +11,7 @@ void main() {
   vec3 light = vec3(80.0, 150.0, 50.0);
   //vec3 color = colorForScale(uScale);
   vec3 color = vec3(0.9, 0.9, 1.0);
+  //color = vec3(vMorphFactor);
 
   // Incident light
   float incidence = dot(normalize(light - vPosition), vNormal);

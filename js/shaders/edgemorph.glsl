@@ -11,7 +11,7 @@ bool edgePresent(int edge) {
   return 2 * ( e / 2 ) != e;
 }
 
-#define MORPH_REGION 0.5
+#define MORPH_REGION 0.3
 
 // At the edges of tiles morph the vertices, if they are joining onto a higher layer
 float calculateMorph(vec3 p) {

@@ -1,18 +1,22 @@
-uniform sampler2D uHeightData;
-uniform float uScale;
-uniform vec2 uOffset;
+uniform int uEdgeMorph;
 uniform vec3 uGlobalOffset;
+uniform sampler2D uHeightData;
+uniform vec2 uOffset;
+uniform float uScale;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
 
 // Number of vertices along edge of tile
 #define TILE_RESOLUTION 128.0
+float tileResolution = TILE_RESOLUTION;
 
 float getHeight(vec3 p) {
   // Assume a 1024x1024 world
   float lod = 0.0;//log2(uScale) - 6.0;
   vec2 st = p.xy / 1024.0;
+
+  // Sample multiple times to get more detail out of map
   float h = 1024.0 * texture2DLod(uHeightData, st, lod).a;
   h += 64.0 * texture2DLod(uHeightData, 16.0 * st, lod).a;
   h += 4.0 * texture2DLod(uHeightData, 256.0 * st, lod).a;
@@ -25,7 +29,7 @@ float getHeight(vec3 p) {
 vec3 getNormal() {
   // Get 2 vectors perpendicular to the unperturbed normal, and create at point at each (relative to position)
   //float delta = 1024.0 / 4.0;
-  float delta = uScale / TILE_RESOLUTION;
+  float delta = uScale / tileResolution;
   vec3 dA = delta * normalize(cross(normal.yzx, normal));
   vec3 dB = delta * normalize(cross(dA, normal));
   vec3 p = vPosition;
@@ -49,7 +53,7 @@ void main() {
   vPosition = uScale * position + vec3(uOffset, 0.0) + uGlobalOffset;
 
   // Snap to grid
-  float grid = uScale / TILE_RESOLUTION;
+  float grid = uScale / tileResolution;
   vPosition = floor(vPosition / grid) * grid;
 
   // Get height and calculate normal

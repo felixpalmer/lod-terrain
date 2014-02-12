@@ -23,6 +23,21 @@ void main() {
   specular = pow(specular, 25.0);
   color = mix(color, vec3(0, 1.0, 1.0), 0.5 * specular);
 
+  // Add more specular light for fun
+  vec3 light2 = vec3(420.0, 510.0, 30.0);
+  halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light2 - vPosition));
+  specular = dot(vNormal, halfVector);
+  specular = max(0.0, specular);
+  specular = pow(specular, 3.0);
+  color = mix(color, vec3(1.0, 0.3, 0), 0.5 * specular);
+
+  vec3 light3 = vec3(0.0, 0.0, 1000.0);
+  halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light3 - vPosition));
+  specular = dot(vNormal, halfVector);
+  specular = max(0.0, specular);
+  specular = pow(specular, 60.0);
+  color = mix(color, vec3(1.0, 1.0, 1.0), specular);
+
   // Add fog
   float depth = gl_FragCoord.z / gl_FragCoord.w;
   float fogFactor = smoothstep( 300.0, 1000.0, depth );

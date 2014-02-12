@@ -1,40 +1,16 @@
-define( ["three", "camera", "controls", "geometry", "light", "material", "renderer", "scene"],
-function ( THREE, camera, controls, geometry, light, material, renderer, scene ) {
+define( ["three", "camera", "controls", "geometry", "material", "renderer", "scene", "terrain"],
+function ( THREE, camera, controls, geometry, material, renderer, scene, Terrain ) {
+
   var app = {
     clock: new THREE.Clock(),
     offset: new THREE.Vector3( 0, 0, 0 ),
     init: function () {
 
+      // Add terrain
       var worldWidth = 1024;
+      app.terrain = new Terrain( worldWidth );
+      scene.add( app.terrain );
 
-      var createTile = function ( x, y, scale ) {
-        var plane = new THREE.Mesh( geometry.plane, material.terrain() );
-        plane.material.uniforms.uOffset.value.x = x;
-        plane.material.uniforms.uOffset.value.y = y;
-        plane.material.uniforms.uGlobalOffset.value = app.offset;
-        plane.material.uniforms.uScale.value = scale;
-        scene.add( plane );
-      };
-
-      createTile( 0, 0, 1 );
-      for ( var scale = 16; scale < worldWidth; scale *= 2 ) {
-        createTile( -2 * scale, -2 * scale, scale );
-        createTile( -2 * scale, -scale, scale );
-        createTile( -2 * scale, 0, scale );
-        createTile( -2 * scale, scale, scale );
-
-        createTile( -scale, -2 * scale, scale );
-        createTile( -scale, scale, scale );
-
-        createTile( 0, -2 * scale, scale );
-        createTile( 0, scale, scale );
-
-        createTile( scale, -2 * scale, scale );
-        createTile( scale, -scale, scale );
-        createTile( scale, 0, scale );
-        createTile( scale, scale, scale );
-      }
-      
       // Add sky
       var sky = new THREE.Mesh( geometry.sky, material.sky );
       sky.position.z = 150;

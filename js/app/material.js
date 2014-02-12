@@ -9,10 +9,11 @@ function ( THREE, noise, terrainVert, terrainFrag, texture ) {
     terrain: function () {
       return new THREE.ShaderMaterial( {
         uniforms: {
+          uEdgeMorph: { type: "i", value: 0 },
+          uGlobalOffset: { type: "v3", value: new THREE.Vector3( 0, 0, 0 ) },
           uHeightData: { type: "t", value: noise },
-          uScale: { type: "f", value: 1.0 },
           uOffset: { type: "v2", value: new THREE.Vector2( 0, 0 ) },
-          uGlobalOffset: { type: "v3", value: new THREE.Vector3( 0, 0, 0 ) }
+          uScale: { type: "f", value: 1.0 }
         },
         vertexShader: terrainVert.value,
         fragmentShader: terrainFrag.value

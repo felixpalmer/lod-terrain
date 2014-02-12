@@ -1,14 +1,12 @@
 /* base styles */
 
 html {
-  font-family: "Hamburger", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 24px;
   line-height: 1.2;
-  color: #fed;
-  text-shadow: black 5px 5px;
+  color: #444;
+  text-shadow: black 5px 5px 10px;
   text-align: center;
-  background: #113;
-  background: linear-gradient(45deg, #210, #100);
 }
 
 body {
@@ -19,21 +17,22 @@ h1 {
   font-size: 70px;
 }
 
-p {
-  margin: 0 0 10px 0;
+#title {
+  position: absolute;
+  z-index: 100;
+  top: 60px;
+  left: 80px;
 }
 
-#container {
-  padding-left: 100px;
-  padding-right: 100px;
-  padding-bottom: 100px;
-}
 
 /* threejs container styles */
 #example-container {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
   background:#111;
-  margin: 20px auto;
-  padding: 20px;
   min-height: 300px;
 }
 
@@ -42,8 +41,7 @@ p {
   background:#000;
   color: #666;
   text-align: center;
-  padding: 50% 0 0 0;
-  height: 0;
+  height: 100%;
 }
 
 #threejs-container canvas {

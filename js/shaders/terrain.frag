@@ -14,7 +14,7 @@ void main() {
   // Incident light
   float incidence = dot(normalize(light - vPosition), vNormal);
   incidence = clamp(incidence, 0.0, 1.0);
-  color = mix(vec3(0, 0.1, 0.3), color, incidence);
+  color = mix(vec3(0, 0.03, 0.1), color, incidence);
 
   // Mix in specular light
   vec3 halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light - vPosition));
@@ -25,8 +25,8 @@ void main() {
 
   // Add fog
   float depth = gl_FragCoord.z / gl_FragCoord.w;
-  float fogFactor = smoothstep( 200.0, 600.0, depth );
+  float fogFactor = smoothstep( 300.0, 1000.0, depth );
   //fogFactor = fogFactor * ( 1.0 - clamp( ( camH - 5.0 ) / 8.0, 0.0, 1.0 ) );
-  color = mix( color, vec3( 0, 0.05, 0.15 ), fogFactor );
+  color = mix( color, vec3( 0, 0, 0 ), fogFactor );
   gl_FragColor = vec4(color, 1.0);
 }

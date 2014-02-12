@@ -7,7 +7,7 @@ varying vec3 vNormal;
 varying vec3 vPosition;
 
 // Number of vertices along edge of tile
-#define TILE_RESOLUTION 64.0
+#define TILE_RESOLUTION 128.0
 
 float getHeight(vec3 p) {
   // Assume a 1024x1024 world

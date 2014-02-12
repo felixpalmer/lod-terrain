@@ -1,6 +1,11 @@
 define( ["three", "noise", "shader!terrain.vert", "shader!terrain.frag", "texture"],
 function ( THREE, noise, terrainVert, terrainFrag, texture ) {
   return {
+    sky: new THREE.MeshBasicMaterial( {
+      fog: true,
+      map: texture.sky,
+      side: THREE.DoubleSide
+    } ),
     terrain: function () {
       return new THREE.ShaderMaterial( {
         uniforms: {
@@ -11,7 +16,7 @@ function ( THREE, noise, terrainVert, terrainFrag, texture ) {
         },
         vertexShader: terrainVert.value,
         fragmentShader: terrainFrag.value
-      });
+      } );
     }
   };
 } );

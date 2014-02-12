@@ -6,6 +6,7 @@ define( ["three"], function ( THREE ) {
   plane.applyMatrix( m );
   return {
     cube: new THREE.CubeGeometry( 200, 200, 200 ),
-    plane: plane
+    plane: plane,
+    sky: new THREE.PlaneGeometry( 1024, 1024 )
   };
 } );

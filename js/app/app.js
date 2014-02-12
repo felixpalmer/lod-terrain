@@ -34,6 +34,11 @@ function ( THREE, camera, controls, geometry, light, material, renderer, scene )
         createTile( scale, 0, scale );
         createTile( scale, scale, scale );
       }
+      
+      // Add sky
+      var sky = new THREE.Mesh( geometry.sky, material.sky );
+      sky.position.z = 150;
+      scene.add( sky );
     },
     animate: function () {
       window.requestAnimationFrame( app.animate );

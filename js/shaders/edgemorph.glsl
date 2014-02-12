@@ -5,22 +5,33 @@ uniform int uEdgeMorph;
 #define EGDE_MORPH_BOTTOM 4
 #define EGDE_MORPH_RIGHT 8
 
+// Poor man's bitwise &
 bool edgePresent(int edge) {
-  // Poor man's bitwise &
   int e = uEdgeMorph / edge;
   return 2 * ( e / 2 ) != e;
 }
 
+#define MORPH_REGION 0.5
+
 // At the edges of tiles morph the vertices, if they are joining onto a higher layer
 float calculateMorph(vec3 p) {
-  if( ( edgePresent(EGDE_MORPH_TOP) && position.y == 1.0 ) ||
-      ( edgePresent(EGDE_MORPH_LEFT) && position.x == 0.0 ) ||
-      ( edgePresent(EGDE_MORPH_BOTTOM) && position.y == 0.0 ) ||
-      ( edgePresent(EGDE_MORPH_RIGHT) && position.x == 1.0 ) ) {
-    // Bordering with next layer, half our resolution, so we snap to the same locations
-    // as the bordering layer
-    return 1.0;
+  float morphFactor = 0.0;
+  if( edgePresent(EGDE_MORPH_TOP) && p.y >= 1.0 - MORPH_REGION ) {
+    float m = 1.0 - clamp((1.0 - p.y) / MORPH_REGION, 0.0, 1.0);
+    morphFactor = max(m, morphFactor);
+  }
+  if( edgePresent(EGDE_MORPH_LEFT) && p.x <= MORPH_REGION ) {
+    float m = 1.0 - clamp(p.x / MORPH_REGION, 0.0, 1.0);
+    morphFactor = max(m, morphFactor);
+  }
+  if( edgePresent(EGDE_MORPH_BOTTOM) && p.y <= MORPH_REGION ) {
+    float m = 1.0 - clamp(p.y / MORPH_REGION, 0.0, 1.0);
+    morphFactor = max(m, morphFactor);
+  }
+  if( edgePresent(EGDE_MORPH_RIGHT) && p.x >= 1.0 - MORPH_REGION ) {
+    float m = 1.0 - clamp((1.0 - p.x) / MORPH_REGION, 0.0, 1.0);
+    morphFactor = max(m, morphFactor);
   }
 
-  return 0.0;
+  return morphFactor;
 }

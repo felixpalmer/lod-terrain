@@ -28,7 +28,7 @@ float getHeight(vec3 p) {
 vec3 getNormal() {
   // Get 2 vectors perpendicular to the unperturbed normal, and create at point at each (relative to position)
   //float delta = 1024.0 / 4.0;
-  float delta = uScale / TILE_RESOLUTION;
+  float delta = (morphFactor + 1.0) * uScale / TILE_RESOLUTION;
   vec3 dA = delta * normalize(cross(normal.yzx, normal));
   vec3 dB = delta * normalize(cross(dA, normal));
   vec3 p = vPosition;
@@ -53,7 +53,7 @@ void main() {
   // Morph factor tells us how close we are to next level.
   // 0.0 is this level
   // 1.0 is next level
-  float morphFactor = calculateMorph(position);
+  morphFactor = calculateMorph(position);
 
   // Move into correct place
   vPosition = uScale * position + vec3(uOffset, 0.0) + uGlobalOffset;
@@ -65,7 +65,7 @@ void main() {
   // Morph between zoom layers
   if( morphFactor > 0.0 ) {
     // Get position that we would have if we were on higher level grid
-    float grid = 2.0 * grid;
+    grid = 2.0 * grid;
     vec3 position2 = floor(vPosition / grid) * grid;
 
     // Linearly interpolate the two, depending on morph factor

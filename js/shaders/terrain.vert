@@ -1,5 +1,3 @@
-uniform int uEdgeMorph;
-
 uniform vec3 uGlobalOffset;
 uniform sampler2D uHeightData;
 uniform vec2 uOffset;
@@ -10,7 +8,7 @@ varying vec3 vPosition;
 
 // Number of vertices along edge of tile
 #define TILE_RESOLUTION 128.0
-float tileResolution = TILE_RESOLUTION;
+float morphFactor = 0.0;
 
 float getHeight(vec3 p) {
   // Assume a 1024x1024 world
@@ -30,7 +28,7 @@ float getHeight(vec3 p) {
 vec3 getNormal() {
   // Get 2 vectors perpendicular to the unperturbed normal, and create at point at each (relative to position)
   //float delta = 1024.0 / 4.0;
-  float delta = uScale / tileResolution;
+  float delta = uScale / TILE_RESOLUTION;
   vec3 dA = delta * normalize(cross(normal.yzx, normal));
   vec3 dB = delta * normalize(cross(dA, normal));
   vec3 p = vPosition;
@@ -49,34 +47,30 @@ vec3 getNormal() {
   return normalize(cross(pB - p, pA - p));
 }
 
-#define EGDE_MORPH_TOP 1
-#define EGDE_MORPH_LEFT 2
-#define EGDE_MORPH_BOTTOM 4
-#define EGDE_MORPH_RIGHT 8
-// At the edges of tiles morph the vertices, if they are joining onto a higher layer
-float calculateMorph(vec3 p) {
-  if ( (uEdgeMorph == EGDE_MORPH_TOP && position.y == 1.0 ) ||
-       (uEdgeMorph == EGDE_MORPH_LEFT && position.x == 0.0 ) ||
-       (uEdgeMorph == EGDE_MORPH_BOTTOM && position.y == 0.0 ) ||
-       (uEdgeMorph == EGDE_MORPH_RIGHT && position.x == 1.0 ) ) {
-    // Bordering with next layer, half our resolution, so we snap to the same locations
-    // as the bordering layer
-    return TILE_RESOLUTION / 2.0;
-  }
-
-
-  return TILE_RESOLUTION;
-}
+#include edgemorph.glsl
 
 void main() {
-  tileResolution = calculateMorph(position);
+  // Morph factor tells us how close we are to next level.
+  // 0.0 is this level
+  // 1.0 is next level
+  float morphFactor = calculateMorph(position);
 
   // Move into correct place
   vPosition = uScale * position + vec3(uOffset, 0.0) + uGlobalOffset;
 
   // Snap to grid
-  float grid = uScale / tileResolution;
+  float grid = uScale / TILE_RESOLUTION;
   vPosition = floor(vPosition / grid) * grid;
+
+  // Morph between zoom layers
+  if( morphFactor > 0.0 ) {
+    // Get position that we would have if we were on higher level grid
+    float grid = 2.0 * grid;
+    vec3 position2 = floor(vPosition / grid) * grid;
+
+    // Linearly interpolate the two, depending on morph factor
+    vPosition = mix(vPosition, position2, morphFactor);
+  }
 
   // Get height and calculate normal
   vPosition = vPosition + normal * getHeight(vPosition);

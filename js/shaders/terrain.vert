@@ -1,4 +1,5 @@
 uniform int uEdgeMorph;
+
 uniform vec3 uGlobalOffset;
 uniform sampler2D uHeightData;
 uniform vec2 uOffset;
@@ -48,7 +49,28 @@ vec3 getNormal() {
   return normalize(cross(pB - p, pA - p));
 }
 
+#define EGDE_MORPH_TOP 1
+#define EGDE_MORPH_LEFT 2
+#define EGDE_MORPH_BOTTOM 4
+#define EGDE_MORPH_RIGHT 8
+// At the edges of tiles morph the vertices, if they are joining onto a higher layer
+float calculateMorph(vec3 p) {
+  if ( (uEdgeMorph == EGDE_MORPH_TOP && position.y == 1.0 ) ||
+       (uEdgeMorph == EGDE_MORPH_LEFT && position.x == 0.0 ) ||
+       (uEdgeMorph == EGDE_MORPH_BOTTOM && position.y == 0.0 ) ||
+       (uEdgeMorph == EGDE_MORPH_RIGHT && position.x == 1.0 ) ) {
+    // Bordering with next layer, half our resolution, so we snap to the same locations
+    // as the bordering layer
+    return TILE_RESOLUTION / 2.0;
+  }
+
+
+  return TILE_RESOLUTION;
+}
+
 void main() {
+  tileResolution = calculateMorph(position);
+
   // Move into correct place
   vPosition = uScale * position + vec3(uOffset, 0.0) + uGlobalOffset;
 

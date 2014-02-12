@@ -14,6 +14,8 @@ define( ["three", "geometry", "material"], function ( THREE, geometry, material 
   var Terrain = function( worldWidth ) {
     THREE.Object3D.call( this );
 
+    this.offset = new THREE.Vector3( 0, 0, 0 );
+
     // Create "quadtree" of tiles, with smallest in center
     // Each added layer consists of the following tiles (marked 'A'), with the tiles
     // in the middle being created in previous layers
@@ -56,7 +58,7 @@ define( ["three", "geometry", "material"], function ( THREE, geometry, material 
     var plane = new THREE.Mesh( geometry.plane, material.terrain() );
     plane.material.uniforms.uOffset.value.x = x;
     plane.material.uniforms.uOffset.value.y = y;
-    plane.material.uniforms.uGlobalOffset.value = this.position;
+    plane.material.uniforms.uGlobalOffset.value = this.offset;
     plane.material.uniforms.uScale.value = scale;
     plane.material.uniforms.uEdgeMorph.value = edgeMorph;
     this.add( plane );

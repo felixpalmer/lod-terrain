@@ -3,7 +3,6 @@ function ( THREE, camera, controls, geometry, material, renderer, scene, Terrain
 
   var app = {
     clock: new THREE.Clock(),
-    offset: new THREE.Vector3( 0, 0, 0 ),
     init: function () {
 
       // Add terrain
@@ -23,8 +22,8 @@ function ( THREE, camera, controls, geometry, material, renderer, scene, Terrain
       camera.position.x = 450 * Math.cos( time / 3 ) + 200;
       camera.position.y = 250 * Math.sin( time / 4 ) + 200;
       camera.lookAt( new THREE.Vector3( 25, 25, 0 ) );
-      app.offset.x = camera.position.x;
-      app.offset.y = camera.position.y;
+      app.terrain.offset.x = camera.position.x;
+      app.terrain.offset.y = camera.position.y;
       renderer.render( scene, camera );
     }
   };

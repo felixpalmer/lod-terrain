@@ -17,7 +17,7 @@ function ( THREE, camera, controls, geometry, light, material, renderer, scene )
       };
 
       createTile( 0, 0, 1 );
-      for ( var scale = 1; scale < worldWidth; scale *= 2 ) {
+      for ( var scale = 16; scale < worldWidth; scale *= 2 ) {
         createTile( -2 * scale, -2 * scale, scale );
         createTile( -2 * scale, -scale, scale );
         createTile( -2 * scale, 0, scale );

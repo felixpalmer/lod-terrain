@@ -2,7 +2,6 @@ uniform float uScale;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
-varying vec2 vUv;
 
 #include colorScale.glsl
 

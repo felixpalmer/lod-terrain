@@ -5,11 +5,13 @@ uniform vec3 uGlobalOffset;
 
 varying vec3 vNormal;
 varying vec3 vPosition;
-varying vec2 vUv;
+
+// Number of vertices along edge of tile
+#define TILE_RESOLUTION 64.0
 
 float getHeight(vec3 p) {
   // Assume a 1024x1024 world
-  float lod = log2(uScale) - 6.0;
+  float lod = 0.0;//log2(uScale) - 6.0;
   vec2 st = p.xy / 1024.0;
   float h = 1024.0 * texture2DLod(uHeightData, st, lod).a;
   h += 64.0 * texture2DLod(uHeightData, 16.0 * st, lod).a;
@@ -17,12 +19,13 @@ float getHeight(vec3 p) {
 
   // Square the height, leads to more rocky looking terrain
   return h * h / 2000.0;
+  //return h / 10.0;
 }
 
 vec3 getNormal() {
   // Get 2 vectors perpendicular to the unperturbed normal, and create at point at each (relative to position)
   //float delta = 1024.0 / 4.0;
-  float delta = uScale / 64.0;
+  float delta = uScale / TILE_RESOLUTION;
   vec3 dA = delta * normalize(cross(normal.yzx, normal));
   vec3 dB = delta * normalize(cross(dA, normal));
   vec3 p = vPosition;
@@ -42,13 +45,15 @@ vec3 getNormal() {
 }
 
 void main() {
+  // Move into correct place
   vPosition = uScale * position + vec3(uOffset, 0.0) + uGlobalOffset;
-  // Snap to grid
-  float grid = uScale / 64.0;
-  vPosition = grid * floor(vPosition / grid);
 
+  // Snap to grid
+  float grid = uScale / TILE_RESOLUTION;
+  vPosition = floor(vPosition / grid) * grid;
+
+  // Get height and calculate normal
   vPosition = vPosition + normal * getHeight(vPosition);
   vNormal = getNormal();
-  vUv = uv;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(vPosition, 1.0);
 }

@@ -7,6 +7,6 @@ define( ["three"], function ( THREE ) {
   return {
     cube: new THREE.CubeGeometry( 200, 200, 200 ),
     plane: plane,
-    sky: new THREE.PlaneGeometry( 1024, 1024 )
+    sky: new THREE.PlaneGeometry( 1600, 1600 )
   };
 } );

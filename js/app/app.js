@@ -44,8 +44,8 @@ function ( THREE, camera, controls, geometry, light, material, renderer, scene )
       window.requestAnimationFrame( app.animate );
       //controls.update( app.clock.getDelta() );
       var time = app.clock.getElapsedTime();
-      camera.position.x = 100 * Math.cos( time / 3 ) + 200;
-      camera.position.y = 100 * Math.sin( time / 3 ) + 200;
+      camera.position.x = 450 * Math.cos( time / 3 ) + 200;
+      camera.position.y = 250 * Math.sin( time / 4 ) + 200;
       camera.lookAt( new THREE.Vector3( 25, 25, 0 ) );
       app.offset.x = camera.position.x;
       app.offset.y = camera.position.y;

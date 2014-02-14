@@ -1,6 +1,6 @@
 uniform vec3 uGlobalOffset;
 uniform sampler2D uHeightData;
-uniform vec2 uOffset;
+uniform vec2 uTileOffset;
 uniform float uScale;
 
 varying vec3 vNormal;
@@ -56,7 +56,7 @@ void main() {
   vMorphFactor = calculateMorph(position);
 
   // Move into correct place
-  vPosition = uScale * position + vec3(uOffset, 0.0) + uGlobalOffset;
+  vPosition = uScale * position + vec3(uTileOffset, 0.0) + uGlobalOffset;
 
   // Snap to grid
   float grid = uScale / TILE_RESOLUTION;

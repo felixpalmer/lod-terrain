@@ -7,13 +7,14 @@ function ( THREE, terrainVert, terrainFrag, texture ) {
       side: THREE.DoubleSide
     } ),
     createTerrainMaterial: function( heightData, globalOffset, offset, scale, resolution, edgeMorph ) {
+      // Is it bad to change this for every tile?
       terrainVert.define( "TILE_RESOLUTION", resolution.toFixed(1) );
       return new THREE.ShaderMaterial( {
         uniforms: {
           uEdgeMorph: { type: "i", value: edgeMorph },
           uGlobalOffset: { type: "v3", value: globalOffset },
           uHeightData: { type: "t", value: heightData },
-          uOffset: { type: "v2", value: offset },
+          uTileOffset: { type: "v2", value: offset },
           uScale: { type: "f", value: scale }
         },
         vertexShader: terrainVert.value,

@@ -3,9 +3,8 @@ function ( THREE, camera, controls, geometry, material, noise, renderer, scene, 
   var app = {
     clock: new THREE.Clock(),
     init: function () {
-      // Add terrain
-      var worldWidth = 1024;
-      app.terrain = new Terrain( worldWidth, 5, noise );
+      // Terrain( heightdata, worldWidth, levels of detail, tile resolution )
+      app.terrain = new Terrain( noise, 1024, 4, 128 );
       scene.add( app.terrain );
 
       // Add sky

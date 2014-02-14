@@ -6,10 +6,11 @@ function ( THREE, terrainVert, terrainFrag, texture ) {
       map: texture.sky,
       side: THREE.DoubleSide
     } ),
-    createTerrainMaterial: function( edge, globalOffset, offset, scale, heightData ) {
+    createTerrainMaterial: function( heightData, globalOffset, offset, scale, resolution, edgeMorph ) {
+      terrainVert.define( "TILE_RESOLUTION", resolution.toFixed(1) );
       return new THREE.ShaderMaterial( {
         uniforms: {
-          uEdgeMorph: { type: "i", value: edge },
+          uEdgeMorph: { type: "i", value: edgeMorph },
           uGlobalOffset: { type: "v3", value: globalOffset },
           uHeightData: { type: "t", value: heightData },
           uOffset: { type: "v2", value: offset },

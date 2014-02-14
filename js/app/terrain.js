@@ -11,10 +11,26 @@ define( ["three", "geometry", "material"], function ( THREE, geometry, material 
   };
 
   // Terrain is an extension of Object3D and thus can be added directly to the stage
-  var Terrain = function( worldWidth ) {
+  var Terrain = function( worldWidth, levels ) {
     THREE.Object3D.call( this );
 
+    this.worldWidth = ( worldWidth !== undefined ) ? worldWidth : 1024;
+    this.levels = ( levels !== undefined ) ? levels : 6;
     this.offset = new THREE.Vector3( 0, 0, 0 );
+
+    /*jslint bitwise: true */
+    var initialScale = this.worldWidth / Math.pow( 2, levels );
+
+    // Create center layer first
+    //    +---+---+
+    //    | O | O |
+    //    +---+---+
+    //    | O | O |
+    //    +---+---+
+    this.createTile( -initialScale, -initialScale, initialScale, Edge.NONE );
+    this.createTile( -initialScale, 0, initialScale, Edge.NONE );
+    this.createTile( 0, 0, initialScale, Edge.NONE );
+    this.createTile( 0, -initialScale, initialScale, Edge.NONE );
 
     // Create "quadtree" of tiles, with smallest in center
     // Each added layer consists of the following tiles (marked 'A'), with the tiles
@@ -28,9 +44,7 @@ define( ["three", "geometry", "material"], function ( THREE, geometry, material 
     // +---+---+---+---+
     // | A | A | A | A |
     // +---+---+---+---+
-    this.createTile( 0, 0, 1, Edge.NONE );
-    /*jslint bitwise: true */
-    for ( var scale = 16; scale < worldWidth; scale *= 2 ) {
+    for ( var scale = initialScale; scale < worldWidth; scale *= 2 ) {
       this.createTile( -2 * scale, -2 * scale, scale, Edge.BOTTOM | Edge.LEFT );
       this.createTile( -2 * scale, -scale, scale, Edge.LEFT );
       this.createTile( -2 * scale, 0, scale, Edge.LEFT );

@@ -1,13 +1,11 @@
-define( ["three", "camera", "controls", "geometry", "material", "renderer", "scene", "terrain"],
-function ( THREE, camera, controls, geometry, material, renderer, scene, Terrain ) {
-
+define( ["three", "camera", "controls", "geometry", "material", "noise", "renderer", "scene", "terrain"],
+function ( THREE, camera, controls, geometry, material, noise, renderer, scene, Terrain ) {
   var app = {
     clock: new THREE.Clock(),
     init: function () {
-
       // Add terrain
       var worldWidth = 1024;
-      app.terrain = new Terrain( worldWidth, 3 );
+      app.terrain = new Terrain( worldWidth, 5, noise );
       scene.add( app.terrain );
 
       // Add sky

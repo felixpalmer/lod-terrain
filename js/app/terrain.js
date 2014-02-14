@@ -11,13 +11,24 @@ define( ["three", "geometry", "material"], function ( THREE, geometry, material 
   };
 
   // Terrain is an extension of Object3D and thus can be added directly to the stage
-  var Terrain = function( worldWidth, levels ) {
+  var Terrain = function( worldWidth, levels, heightData ) {
     THREE.Object3D.call( this );
 
     this.worldWidth = ( worldWidth !== undefined ) ? worldWidth : 1024;
     this.levels = ( levels !== undefined ) ? levels : 6;
+    this.heightData = heightData;
+
+    // Offset is used to move the terrain around
     this.offset = new THREE.Vector3( 0, 0, 0 );
 
+    // Create geometry that we'll use for each tile, just a standard plane
+    this.tileGeometry = new THREE.PlaneGeometry( 1, 1, 128, 128 );
+    // Place origin at bottom left corner, rather than center
+    var m = new THREE.Matrix4();
+    m.makeTranslation( 0.5, 0.5, 0 );
+    this.tileGeometry.applyMatrix( m );
+
+    // Create collection of tiles to fill required space
     /*jslint bitwise: true */
     var initialScale = this.worldWidth / Math.pow( 2, levels );
 
@@ -69,12 +80,12 @@ define( ["three", "geometry", "material"], function ( THREE, geometry, material 
   Terrain.prototype = Object.create( THREE.Object3D.prototype );
 
   Terrain.prototype.createTile = function ( x, y, scale, edgeMorph ) {
-    var plane = new THREE.Mesh( geometry.plane, material.terrain() );
-    plane.material.uniforms.uOffset.value.x = x;
-    plane.material.uniforms.uOffset.value.y = y;
-    plane.material.uniforms.uGlobalOffset.value = this.offset;
-    plane.material.uniforms.uScale.value = scale;
-    plane.material.uniforms.uEdgeMorph.value = edgeMorph;
+    var terrainMaterial = material.createTerrainMaterial( edgeMorph,
+                                                          this.offset,
+                                                          new THREE.Vector2( x, y ),
+                                                          scale,
+                                                          this.heightData );
+    var plane = new THREE.Mesh( this.tileGeometry, terrainMaterial );
     this.add( plane );
   };
 

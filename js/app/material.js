@@ -1,19 +1,19 @@
-define( ["three", "noise", "shader!terrain.vert", "shader!terrain.frag", "texture"],
-function ( THREE, noise, terrainVert, terrainFrag, texture ) {
+define( ["three", "shader!terrain.vert", "shader!terrain.frag", "texture"],
+function ( THREE, terrainVert, terrainFrag, texture ) {
   return {
     sky: new THREE.MeshBasicMaterial( {
       fog: true,
       map: texture.sky,
       side: THREE.DoubleSide
     } ),
-    terrain: function () {
+    createTerrainMaterial: function( edge, globalOffset, offset, scale, heightData ) {
       return new THREE.ShaderMaterial( {
         uniforms: {
-          uEdgeMorph: { type: "i", value: 0 },
-          uGlobalOffset: { type: "v3", value: new THREE.Vector3( 0, 0, 0 ) },
-          uHeightData: { type: "t", value: noise },
-          uOffset: { type: "v2", value: new THREE.Vector2( 0, 0 ) },
-          uScale: { type: "f", value: 1.0 }
+          uEdgeMorph: { type: "i", value: edge },
+          uGlobalOffset: { type: "v3", value: globalOffset },
+          uHeightData: { type: "t", value: heightData },
+          uOffset: { type: "v2", value: offset },
+          uScale: { type: "f", value: scale }
         },
         vertexShader: terrainVert.value,
         fragmentShader: terrainFrag.value

@@ -7,6 +7,7 @@ var require = {
     'threeCore': { exports: 'THREE' },
     'TrackballControls': { deps: ['threeCore'], exports: 'THREE' },
     // --- end THREE sub-components
+    'ImprovedNoise': { exports: 'ImprovedNoise' },
     'detector': { exports: 'Detector' },
     'stats': { exports: 'Stats' }
   },
@@ -16,11 +17,13 @@ var require = {
     three: '../lib/three',
     threeCore: '../lib/three.min',
     TrackballControls: '../lib/controls/TrackballControls',
+    ImprovedNoise: '../lib/ImprovedNoise',
     // --- end THREE sub-components
     detector: '../lib/Detector',
     stats: '../lib/stats.min',
     // Require.js plugins
     text: '../lib/text',
+    shader: '../lib/shader',
     // Where to look for shader files
     shaders: '../shaders'
   }

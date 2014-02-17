@@ -1,21 +1,25 @@
-define( ["three", "shader!simple.vert", "shader!simple.frag", "texture"], function ( THREE, simpleVert, simpleFrag, texture ) {
-  // Shader objects support redefining of #defines.
-  // See `simple.frag` file, where `faceColor` is already defined to be white, and we are overriding it to red here
-  simpleFrag.define( "faceColor", "vec3(1.0, 0, 0)" );
+define( ["three", "shader!terrain.vert", "shader!terrain.frag", "texture"],
+function ( THREE, terrainVert, terrainFrag, texture ) {
   return {
-    bump: new THREE.MeshPhongMaterial( { bumpMap: texture.grass } ),
-    grass: new THREE.MeshBasicMaterial( { map: texture.grass } ),
-    shader: new THREE.ShaderMaterial( {
-      uniforms: {
-        uColor: { type: "c", value: new THREE.Color( "#ff0000" ) }
-      },
-      vertexShader: simpleVert.value,
-      fragmentShader: simpleFrag.value
-    }),
-    solid: new THREE.MeshLambertMaterial( {
-      color: 0x00dcdc,
-      shading: THREE.FlatShading
-    }),
-    wire: new THREE.MeshBasicMaterial( { wireframe: true } )
+    sky: new THREE.MeshBasicMaterial( {
+      fog: true,
+      map: texture.sky,
+      side: THREE.DoubleSide
+    } ),
+    createTerrainMaterial: function( heightData, globalOffset, offset, scale, resolution, edgeMorph ) {
+      // Is it bad to change this for every tile?
+      terrainVert.define( "TILE_RESOLUTION", resolution.toFixed(1) );
+      return new THREE.ShaderMaterial( {
+        uniforms: {
+          uEdgeMorph: { type: "i", value: edgeMorph },
+          uGlobalOffset: { type: "v3", value: globalOffset },
+          uHeightData: { type: "t", value: heightData },
+          uTileOffset: { type: "v2", value: offset },
+          uScale: { type: "f", value: scale }
+        },
+        vertexShader: terrainVert.value,
+        fragmentShader: terrainFrag.value
+      } );
+    }
   };
 } );

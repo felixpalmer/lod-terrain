@@ -72,10 +72,16 @@ void main() {
   specular = pow(specular, 130.0);
   color = mix(color, vec3(1.0, 0.5, 0), specular);
 
-  // Add fog
+  // Add height fog
+  float fogFactor = clamp( 1.0 - vPosition.z / 25.0, 0.0, 1.0 );
+  fogFactor = pow( fogFactor, 5.4 );
+  color = mix( color, vec3( 1.0, 0.9, 0.8 ), fogFactor );
+
+  // Add distance fog
   float depth = gl_FragCoord.z / gl_FragCoord.w;
-  float fogFactor = smoothstep( 300.0, 1000.0, depth );
+  fogFactor = smoothstep( 300.0, 1000.0, depth );
   //fogFactor = fogFactor * ( 1.0 - clamp( ( camH - 5.0 ) / 8.0, 0.0, 1.0 ) );
   color = mix( color, vec3( 0, 0, 0 ), fogFactor );
+
   gl_FragColor = vec4(color, 1.0);
 }

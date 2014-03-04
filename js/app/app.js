@@ -4,7 +4,7 @@ function ( THREE, camera, controls, geometry, material, noise, renderer, scene, 
     clock: new THREE.Clock(),
     init: function () {
       // Terrain( heightdata, worldWidth, levels of detail, tile resolution )
-      app.terrain = new Terrain( noise, 1024, 4, 128 );
+      app.terrain = new Terrain( noise, 1024, 4, 64 );
       scene.add( app.terrain );
 
       // Add sky

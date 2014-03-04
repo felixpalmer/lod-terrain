@@ -18,7 +18,7 @@ float getHeight(vec3 p) {
   // Sample multiple times to get more detail out of map
   float h = 1024.0 * texture2DLod(uHeightData, st, lod).a;
   h += 64.0 * texture2DLod(uHeightData, 16.0 * st, lod).a;
-  h += 4.0 * texture2DLod(uHeightData, 256.0 * st, lod).a;
+  //h += 4.0 * texture2DLod(uHeightData, 256.0 * st, lod).a;
 
   // Square the height, leads to more rocky looking terrain
   return h * h / 2000.0;

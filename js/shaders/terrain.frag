@@ -28,8 +28,8 @@ vec3 getNormal() {
   float depth = getHeight(vPosition);
   float dDepthdx = dFdx(depth);
   float dDepthdy = dFdy(depth);
-  dPositiondx -= dDepthdx * vNormal;
-  dPositiondy -= dDepthdy * vNormal;
+  dPositiondx += dDepthdx * vNormal;
+  dPositiondy += dDepthdy * vNormal;
 
   // The normal is the cross product of the differentials
   return normalize(cross(dPositiondx, dPositiondy));
@@ -48,7 +48,7 @@ void main() {
   float incidence = dot(normalize(light - vPosition), normal);
   incidence = clamp(incidence, 0.0, 1.0);
   incidence = pow(incidence, 0.02);
-  color = mix(color, vec3(0, 0, 0), incidence);
+  color = mix(vec3(0, 0, 0), color, incidence);
 
   // Mix in specular light
   vec3 halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light - vPosition));

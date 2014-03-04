@@ -22,14 +22,14 @@ float getHeight(vec3 p) {
 }
 
 vec3 getNormal() {
-  // Differentiate the position vector
-  vec3 dPositiondx = dFdx(vPosition);
-  vec3 dPositiondy = dFdy(vPosition);
-  float depth = getHeight(vPosition);
-  float dDepthdx = dFdx(depth);
-  float dDepthdy = dFdy(depth);
-  dPositiondx += dDepthdx * vNormal;
-  dPositiondy += dDepthdy * vNormal;
+  // Differentiate the position vector (this will give us two vectors perpendicular to the surface)
+  // Before differentiating, add the displacement based on the height from the height map. By doing this
+  // calculation here, rather than in the vertex shader, we get a per-fragment calculated normal, rather
+  // than a per-vertex normal. This improves the look of distant low-vertex terrain.
+  float height = getHeight(vPosition);
+  vec3 p = vec3(vPosition.xy, 0) + vNormal * height;
+  vec3 dPositiondx = dFdx(p);
+  vec3 dPositiondy = dFdy(p);
 
   // The normal is the cross product of the differentials
   return normalize(cross(dPositiondx, dPositiondy));

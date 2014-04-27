@@ -88,12 +88,12 @@
 		<h2>DEMO</h2>
 	</div></section>
 	<section class="slide"><div>
-		<img src="pictures/lod_terrain_shells.png" alt="">
 		<h2>Arrange tiles in concentric shells</h2>
+		<img src="pictures/lod_terrain_shells.png" alt="">
 	</div></section>
 	<section class="slide"><div>
-		<img src="pictures/lod_terrain_shells_perspective.png" alt="">
 		<h2>Arrange tiles in concentric shells</h2>
+		<img src="pictures/lod_terrain_shells_perspective.png" alt="">
 	</div></section>
 	<section class="slide shout"><div>
 		<h2>DEMO</h2>
@@ -103,31 +103,48 @@
 		<ul>
 			<li>Terrain geometry is static relative to camera</li>
 			<li>Data underlying visulazation is changing</li>
+			<li>Terrain data is "flowing" through the vertices</li>
 			<li>If we do not have enough vertices, terrain will "shake"</li>
         </ul>
 	</div></section>
-	<section class="slide"><div>
 	<section class="slide shout"><div>
 		<h2>DEMO</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>How to fix shaking</h2>
+		<ul>
+			<li>Snap each vertex to a grid, such that the grid spacing is equal to the vertex spacing</li>
+			<li>Snapping will be inperceptable as vertices are equally spaced</li>
+			<li>There's just one problem...</li>
+        </ul>
 	</div></section>
 	<section class="slide"><div>
 		<h2>Seams between layers</h2>
 		<ul>
 			<li>By fixing the shaking we've introduced seams between the layers</li>
-			<li>Seams appear because each shell is snapping to a gridd of different resolution</li>
+			<li>Seams appear because each shell is snapping to a grid of different resolution</li>
 			<li>How to fix?</li>
         </ul>
-		<img src="pictures/lod_terrain_seams.png" alt="">
 	</div></section>
 	<section class="slide shout"><div>
 		<h2>DEMO</h2>
+		<img src="pictures/lod_terrain_seams.png" alt="">
 	</div></section>
 	<section class="slide"><div>
 		<h2>Morphing grid snapping between layers</h2>
 		<ul>
-			<li>Over a short distance between shells, gradually morph the gird to snap to</li>
+			<li>Over a short distance between shells, gradually morph the grid to snap to</li>
         </ul>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>DEMO</h2>
 		<img src="pictures/lod_terrain_morph.png" alt="">
+	</div></section>
+	<section class="slide"><div>
+		<h2>Questions?</h2>
+		<p>http://www.github.com/felixpalmer/lod-terrain</p>
+        <p>http://felixpalmer.github.io/lod-terrain/</p>
+		<p>Felix Palmer | @pheeelicks | www.pheelicks.com</p>
 	</div></section>
 	<div class="progress"><div></div></div>
 	<script src="shower/shower.min.js"></script>

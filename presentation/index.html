@@ -99,8 +99,36 @@
 		<h2>DEMO</h2>
 	</div></section>
 	<section class="slide"><div>
-
-
+		<h2>Moving around the terrain</h2>
+		<ul>
+			<li>Terrain geometry is static relative to camera</li>
+			<li>Data underlying visulazation is changing</li>
+			<li>If we do not have enough vertices, terrain will "shake"</li>
+        </ul>
+	</div></section>
+	<section class="slide"><div>
+	<section class="slide shout"><div>
+		<h2>DEMO</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Seams between layers</h2>
+		<ul>
+			<li>By fixing the shaking we've introduced seams between the layers</li>
+			<li>Seams appear because each shell is snapping to a gridd of different resolution</li>
+			<li>How to fix?</li>
+        </ul>
+		<img src="pictures/lod_terrain_seams.png" alt="">
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>DEMO</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Morphing grid snapping between layers</h2>
+		<ul>
+			<li>Over a short distance between shells, gradually morph the gird to snap to</li>
+        </ul>
+		<img src="pictures/lod_terrain_morph.png" alt="">
+	</div></section>
 	<div class="progress"><div></div></div>
 	<script src="shower/shower.min.js"></script>
 </body>

@@ -40,7 +40,8 @@ h1 {
   top: 0;
   left: 0;
   background:#111;
-  min-height: 300px;
+  min-height: 600px;
+  min-width: 800px;
 }
 
 #threejs-container {

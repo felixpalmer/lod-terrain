@@ -3,6 +3,9 @@ LOD Terrain
 
 LOD Terrain is an example of how to render a terrain with a variable level of detail (LOD), based on the distance from the camera. The approach taken is based on [CD-LOD](http://www.vertexasylum.com/downloads/cdlod/cdlod_latest.pdf). 
 
+* [Accompanying blog post](http://www.pheelicks.com/2014/03/rendering-large-terrains/)
+* [Slides](http://felixpalmer.github.io/lod-terrain/presentation)
+
 [Try out the live demo here](http://felixpalmer.github.io/lod-terrain)
 ![](https://github.com/felixpalmer/lod-terrain/raw/master/screenshots/screenshot1.png)
 ![](https://github.com/felixpalmer/lod-terrain/raw/master/screenshots/screenshot2.png)

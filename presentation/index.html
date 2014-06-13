@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<title>Rendering large terrains in WebGL</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=792, user-scalable=no">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<link rel="stylesheet" href="shower/themes/ribbon/styles/screen.css">
+</head>
+<body class="list">
+	<header class="caption">
+		<h1>Rendering large terrains in WebGL</h1>
+		<p>Felix Palmer - @pheeelicks</p>
+	</header>
+	<section class="slide cover" id="Cover"><div>
+		<h2>Rendering large terrains in WebGL</h2>
+		<p>Felix Palmer | @pheeelicks | www.pheelicks.com</p>
+		<img src="pictures/cover.png" alt="">
+		<!--
+			To apply styles to the certain slides
+			set slide ID to get needed elements
+			-->
+		<style>
+			#Cover h2 {
+				margin:30px 0 0;
+				color:#FFF;
+				text-align:center;
+				font-size:70px;
+				}
+			#Cover p {
+				margin:10px 0 0;
+				text-align:center;
+				color:#FFF;
+				font-style:italic;
+				font-size:20px;
+				}
+				#Cover p a {
+					color:#FFF;
+					}
+		</style>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Talk overview</h2>
+		<ol>
+			<li>Crash course on WebGL shaders</li>
+			<li>Basic approach to problem</li>
+			<li>Using a recursive tile pattern</li>
+			<li>Using a dynamic mesh</li>
+			<li>Questions? Feel free to ask during talk too!</li>
+		</ol>
+		<p class="note">Talk is based on blog post that can be found on <a href="http://www.pheelicks.com">www.pheelicks.com</a></p>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>DEMO</h2>
+        <p class="note">felixpalmer.github.io/lod-terrain/</p>
+	</div></section>
+	<section class="slide"><div>
+		<h2>WebGL graphics pipeline</h2>
+		<ol>
+			<li>Geometry is defined in JavaScript and sent to GPU</li>
+			<li>Vertex shader is invoked on every vertex, allowing it to be moved</li>
+			<li>Fragment (pixel) shader is invoked on each pixel to be drawn</li>
+		</ol>
+        <p class="note">In this talk we'll be looking at the geometry and the vertex shader</p>
+	</div></section>
+	<section class="slide"><div>
+		<img src="pictures/lod_terrain_intro.png" alt="">
+		<h2>Let the graphics card do the work!</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Simple grid approach</h2>
+		<ul>
+			<li>Just have a uniform grid of points across the entire map</li>
+			<li>Pros:
+				<ul>
+                    <li>Simple</li>
+                </ul>
+            </li>
+			<li>Cons:
+                <ul>
+                    <li>Not enough detail in the foreground</li>
+                    <li>Too much detail in in the background</li>
+                </ul>
+            </li>
+		</ul>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>DEMO</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Arrange tiles in concentric shells</h2>
+		<img src="pictures/lod_terrain_shells.png" alt="">
+	</div></section>
+	<section class="slide"><div>
+		<h2>Arrange tiles in concentric shells</h2>
+		<img src="pictures/lod_terrain_shells_perspective.png" alt="">
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>DEMO</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Moving around the terrain</h2>
+		<ul>
+			<li>Terrain geometry is static relative to camera</li>
+			<li>Data underlying visulazation is changing</li>
+			<li>Terrain data is "flowing" through the vertices</li>
+			<li>If we do not have enough vertices, terrain will "shake"</li>
+        </ul>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>DEMO</h2>
+	</div></section>
+	<section class="slide"><div>
+		<h2>How to fix shaking</h2>
+		<ul>
+			<li>Snap each vertex to a grid, such that the grid spacing is equal to the vertex spacing</li>
+			<li>Snapping will be inperceptable as vertices are equally spaced</li>
+			<li>There's just one problem...</li>
+        </ul>
+	</div></section>
+	<section class="slide"><div>
+		<h2>Seams between layers</h2>
+		<ul>
+			<li>By fixing the shaking we've introduced seams between the layers</li>
+			<li>Seams appear because each shell is snapping to a grid of different resolution</li>
+			<li>How to fix?</li>
+        </ul>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>DEMO</h2>
+		<img src="pictures/lod_terrain_seams.png" alt="">
+	</div></section>
+	<section class="slide"><div>
+		<h2>Morphing grid snapping between layers</h2>
+		<ul>
+			<li>Over a short distance between shells, gradually morph the grid to snap to</li>
+        </ul>
+	</div></section>
+	<section class="slide shout"><div>
+		<h2>DEMO</h2>
+		<img src="pictures/lod_terrain_morph.png" alt="">
+	</div></section>
+	<section class="slide"><div>
+		<h2>Questions?</h2>
+		<p>http://www.github.com/felixpalmer/lod-terrain</p>
+        <p>http://felixpalmer.github.io/lod-terrain/</p>
+		<p>Felix Palmer | @pheeelicks | www.pheelicks.com</p>
+	</div></section>
+	<div class="progress"><div></div></div>
+	<script src="shower/shower.min.js"></script>
+</body>
+</html>

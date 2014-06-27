@@ -2,6 +2,10 @@
 uniform float uScale;
 uniform sampler2D uHeightData;
 
+uniform sampler2D uGrass;
+uniform sampler2D uRock;
+uniform sampler2D uSnow;
+
 varying float vMorphFactor;
 varying vec3 vNormal;
 varying vec3 vPosition;
@@ -39,7 +43,13 @@ void main() {
   // Base color
   vec3 light = vec3(80.0, 150.0, 50.0);
   //vec3 color = colorForScale(uScale);
-  vec3 color = vec3(0.27, 0.27, 0.17);
+  float texScale = 0.03;
+
+  vec3 grass = texture2D( uGrass, texScale * vPosition.xy ).rgb;
+  vec3 rock = texture2D( uRock, texScale * vPosition.xy ).rgb;
+  vec3 snow = texture2D( uSnow, texScale * vPosition.xy ).rgb;
+  vec3 color = mix( grass, rock, smoothstep( 0.0, 10.0, vPosition.z ) );
+  color = mix( color, snow, smoothstep( 15.0, 25.0, vPosition.z ) );
   //color = vec3(vMorphFactor);
 
   vec3 normal = getNormal();
@@ -48,29 +58,29 @@ void main() {
   float incidence = dot(normalize(light - vPosition), normal);
   incidence = clamp(incidence, 0.0, 1.0);
   incidence = pow(incidence, 0.02);
-  color = mix(vec3(0, 0, 0), color, incidence);
+  //color = mix(vec3(0, 0, 0), color, incidence);
 
   // Mix in specular light
   vec3 halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light - vPosition));
   float specular = dot(normal, halfVector);
   specular = max(0.0, specular);
   specular = pow(specular, 25.0);
-  color = mix(color, vec3(0, 1.0, 1.0), 0.5 * specular);
+  //color = mix(color, vec3(0, 1.0, 1.0), 0.5 * specular);
 
-  // Add more specular light for fun
-  vec3 light2 = vec3(420.0, 510.0, 30.0);
-  halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light2 - vPosition));
-  specular = dot(normal, halfVector);
-  specular = max(0.0, specular);
-  specular = pow(specular, 3.0);
-  color = mix(color, vec3(1.0, 0.3, 0), 0.5 * specular);
-
-  vec3 light3 = vec3(0.0, 0.0, 1000.0);
-  halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light3 - vPosition));
-  specular = dot(normal, halfVector);
-  specular = max(0.0, specular);
-  specular = pow(specular, 130.0);
-  color = mix(color, vec3(1.0, 0.5, 0), specular);
+//  // Add more specular light for fun
+//  vec3 light2 = vec3(420.0, 510.0, 30.0);
+//  halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light2 - vPosition));
+//  specular = dot(normal, halfVector);
+//  specular = max(0.0, specular);
+//  specular = pow(specular, 3.0);
+//  color = mix(color, vec3(1.0, 0.3, 0), 0.5 * specular);
+//
+//  vec3 light3 = vec3(0.0, 0.0, 1000.0);
+//  halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light3 - vPosition));
+//  specular = dot(normal, halfVector);
+//  specular = max(0.0, specular);
+//  specular = pow(specular, 130.0);
+//  color = mix(color, vec3(1.0, 0.5, 0), specular);
 
   // Add height fog
   float fogFactor = clamp( 1.0 - vPosition.z / 25.0, 0.0, 1.0 );

@@ -14,6 +14,9 @@ function ( THREE, terrainVert, terrainFrag, texture ) {
           uEdgeMorph: { type: "i", value: edgeMorph },
           uGlobalOffset: { type: "v3", value: globalOffset },
           uHeightData: { type: "t", value: heightData },
+          uGrass: { type: "t", value: texture.grass },
+          uRock: { type: "t", value: texture.rock },
+          uSnow: { type: "t", value: texture.snow },
           uTileOffset: { type: "v2", value: offset },
           uScale: { type: "f", value: scale }
         },

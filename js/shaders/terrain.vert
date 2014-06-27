@@ -74,7 +74,7 @@ void main() {
 
   // Get height and calculate normal
   vPosition = vPosition + normal * getHeight(vPosition);
-  //vNormal = getNormal();
-  vNormal = normal;
+  vNormal = getNormal();
+  //vNormal = normal;
   gl_Position = projectionMatrix * modelViewMatrix * vec4(vPosition, 1.0);
 }

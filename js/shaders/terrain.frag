@@ -12,14 +12,14 @@ varying vec3 vPosition;
 
 #include colorScale.glsl
 
-float getHeight(vec3 p) {
+float getHeight( vec3 p ) {
   // Assume a 1024x1024 world
   vec2 st = p.xy / 1024.0;
 
   // Sample multiple times to get more detail out of map
   float h = 1024.0 * texture2D(uHeightData, st).a;
   h += 64.0 * texture2D(uHeightData, 16.0 * st).a;
-  h += 4.0 * texture2D(uHeightData, 256.0 * st).a;
+  //h += 4.0 * texture2D(uHeightData, 256.0 * st).a;
 
   // Square the height, leads to more rocky looking terrain
   return h * h / 2000.0;
@@ -30,8 +30,8 @@ vec3 getNormal() {
   // Before differentiating, add the displacement based on the height from the height map. By doing this
   // calculation here, rather than in the vertex shader, we get a per-fragment calculated normal, rather
   // than a per-vertex normal. This improves the look of distant low-vertex terrain.
-  float height = getHeight(vPosition);
-  vec3 p = vec3(vPosition.xy, 0) + vNormal * height;
+  float height = getHeight( vPosition );
+  vec3 p = vec3(vPosition.xy, height);
   vec3 dPositiondx = dFdx(p);
   vec3 dPositiondy = dFdy(p);
 
@@ -43,22 +43,35 @@ void main() {
   // Base color
   vec3 light = vec3(80.0, 150.0, 50.0);
   //vec3 color = colorForScale(uScale);
+  vec3 normal = getNormal();
+
+  // Combine textures based on height and normal (use rougher normal from vertex shader)
   float texScale = 0.03;
+
+  // Snow stick determines effect of normal on presence of snow
+  float snowStick = dot( vec3( 0, 0, 1.0 ), normal );
+  snowStick = 0.1 + pow( snowStick, 2.0 );
+  float snowAlt = 20.0;
 
   vec3 grass = texture2D( uGrass, texScale * vPosition.xy ).rgb;
   vec3 rock = texture2D( uRock, texScale * vPosition.xy ).rgb;
-  vec3 snow = texture2D( uSnow, texScale * vPosition.xy ).rgb;
-  vec3 color = mix( grass, rock, smoothstep( 0.0, 10.0, vPosition.z ) );
-  color = mix( color, snow, smoothstep( 15.0, 25.0, vPosition.z ) );
+  //vec3 snow = texture2D( uSnow, texScale * vPosition.xy ).rgb;
+  vec3 snow = vec3( 0.93, 0.97, 1.0 );
+  vec3 color = mix( grass, rock, smoothstep( 7.0, 14.0, vPosition.z ) );
+  color = mix( color, snow, smoothstep( snowAlt, snowAlt + 10.0, snowAlt + snowStick * ( vPosition.z - snowAlt ) ) );
   //color = vec3(vMorphFactor);
 
-  vec3 normal = getNormal();
 
   // Incident light
-  float incidence = dot(normalize(light - vPosition), normal);
+  float incidence = dot(normalize(light - vPosition), vNormal);
   incidence = clamp(incidence, 0.0, 1.0);
   incidence = pow(incidence, 0.02);
-  //color = mix(vec3(0, 0, 0), color, incidence);
+  incidence = 0.4 + 0.6 * incidence;
+  color = mix( vec3( 0, 0, 0 ), color, incidence );
+  color = mix( color, vec3( 0.81, 0.9, 1.0 ), 0.2 * incidence );
+
+  // Fade out based on distance
+  //color = mix( color, vec3( 0, 0, 0 ), smoothstep( 350.0, 500.0, distance( light, vPosition ) ) );
 
   // Mix in specular light
   vec3 halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light - vPosition));
@@ -83,9 +96,9 @@ void main() {
 //  color = mix(color, vec3(1.0, 0.5, 0), specular);
 
   // Add height fog
-  float fogFactor = clamp( 1.0 - vPosition.z / 25.0, 0.0, 1.0 );
-  fogFactor = pow( fogFactor, 5.4 );
-  color = mix( color, vec3( 1.0, 0.9, 0.8 ), fogFactor );
+  float fogFactor = clamp( 1.0 - vPosition.z / 35.0, 0.0, 1.0 );
+  fogFactor = 0.6 * pow( fogFactor, 5.4 );
+  color = mix( color, vec3( 0.91, 0.98, 1.0 ), fogFactor );
 
   // Add distance fog
   float depth = gl_FragCoord.z / gl_FragCoord.w;

@@ -50,8 +50,8 @@ void main() {
 
   // Snow stick determines effect of normal on presence of snow
   float snowStick = dot( vec3( 0, 0, 1.0 ), normal );
-  snowStick = 0.1 + 0.9 * pow( snowStick, 12.0 );
-  snowStick = step( 0.5, snowStick );
+  snowStick = pow( snowStick, 12.0 );
+  snowStick = step( 0.1, snowStick );
   float snowAlt = 20.0;
 
   vec3 grass = texture2D( uGrass, texScale * vPosition.xy ).rgb;
@@ -64,13 +64,13 @@ void main() {
   //color = vec3(vMorphFactor);
 
 
-  // Incident light
+  // Incident light (generate shadows and highlights)
   float incidence = dot(normalize(light - vPosition), vNormal);
   incidence = clamp(incidence, 0.0, 1.0);
-  incidence = pow(incidence, 0.02);
-  incidence = 0.4 + 0.6 * incidence;
-  color = mix( vec3( 0, 0, 0 ), color, incidence );
-  color = mix( color, vec3( 0.81, 0.9, 1.0 ), 0.2 * incidence );
+  float shadowFactor = pow(incidence, 0.02);
+  shadowFactor = 0.4 + 0.6 * shadowFactor;
+  color = mix( vec3( 0, 0, 0 ), color, shadowFactor );
+  color = mix( color, vec3( 0.81, 0.9, 1.0 ), 0.2 * shadowFactor );
 
   // Fade out based on distance
   //color = mix( color, vec3( 0, 0, 0 ), smoothstep( 350.0, 500.0, distance( light, vPosition ) ) );
@@ -80,33 +80,22 @@ void main() {
   float specular = dot(normal, halfVector);
   specular = max(0.0, specular);
   specular = pow(specular, 25.0);
-  //color = mix(color, vec3(0, 1.0, 1.0), 0.5 * specular);
-
-//  // Add more specular light for fun
-//  vec3 light2 = vec3(420.0, 510.0, 30.0);
-//  halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light2 - vPosition));
-//  specular = dot(normal, halfVector);
-//  specular = max(0.0, specular);
-//  specular = pow(specular, 3.0);
-//  color = mix(color, vec3(1.0, 0.3, 0), 0.5 * specular);
-//
-//  vec3 light3 = vec3(0.0, 0.0, 1000.0);
-//  halfVector = normalize(normalize(cameraPosition - vPosition) + normalize(light3 - vPosition));
-//  specular = dot(normal, halfVector);
-//  specular = max(0.0, specular);
-//  specular = pow(specular, 130.0);
-//  color = mix(color, vec3(1.0, 0.5, 0), specular);
+  //color = mix(color, vec3(0.1, 0.8, 1.0), 0.5 * specular);
 
   // Add height fog
-  float fogFactor = clamp( 1.0 - vPosition.z / 35.0, 0.0, 1.0 );
+  float fogFactor = clamp( 1.0 - vPosition.z / 155.0, 0.0, 1.0 );
   fogFactor = 0.6 * pow( fogFactor, 5.4 );
-  color = mix( color, vec3( 0.91, 0.98, 1.0 ), fogFactor );
+  float fogAngle = dot( normalize( cameraPosition - vPosition ), normalize( vPosition - light ) );
+  fogAngle = smoothstep( 0.0, 1.0, fogAngle );
+  vec3 fogColor = mix( vec3( 0.91, 0.98, 1.0 ), vec3( 0.98, 0.77, 0.33), fogAngle );
+  color = mix( color, fogColor, fogFactor );
 
   // Add distance fog
   float depth = gl_FragCoord.z / gl_FragCoord.w;
   fogFactor = smoothstep( 300.0, 1000.0, depth );
   //fogFactor = fogFactor * ( 1.0 - clamp( ( camH - 5.0 ) / 8.0, 0.0, 1.0 ) );
-  color = mix( color, vec3( 0, 0, 0 ), fogFactor );
+  fogColor = mix( vec3( 0, 0, 0 ), vec3( 0.98, 0.77, 0.33), fogAngle );
+  color = mix( color, fogColor, fogFactor );
 
   gl_FragColor = vec4(color, 1.0);
 }

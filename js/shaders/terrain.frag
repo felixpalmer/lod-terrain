@@ -50,15 +50,17 @@ void main() {
 
   // Snow stick determines effect of normal on presence of snow
   float snowStick = dot( vec3( 0, 0, 1.0 ), normal );
-  snowStick = 0.1 + pow( snowStick, 2.0 );
+  snowStick = 0.1 + 0.9 * pow( snowStick, 12.0 );
+  snowStick = step( 0.5, snowStick );
   float snowAlt = 20.0;
 
   vec3 grass = texture2D( uGrass, texScale * vPosition.xy ).rgb;
   vec3 rock = texture2D( uRock, texScale * vPosition.xy ).rgb;
   //vec3 snow = texture2D( uSnow, texScale * vPosition.xy ).rgb;
   vec3 snow = vec3( 0.93, 0.97, 1.0 );
-  vec3 color = mix( grass, rock, smoothstep( 7.0, 14.0, vPosition.z ) );
-  color = mix( color, snow, smoothstep( snowAlt, snowAlt + 10.0, snowAlt + snowStick * ( vPosition.z - snowAlt ) ) );
+  //vec3 color = mix( grass, rock, smoothstep( 7.0, 14.0, vPosition.z ) );
+  //vec3 color = mix( rock, snow, smoothstep( snowAlt, snowAlt + 10.0, snowAlt + snowStick * ( vPosition.z - snowAlt ) ) );
+  vec3 color = mix( rock, snow, snowStick );
   //color = vec3(vMorphFactor);
 
 

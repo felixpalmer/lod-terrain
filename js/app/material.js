@@ -1,8 +1,17 @@
-define( ["three", "shader!terrain.vert", "shader!terrain.frag", "texture"],
-function ( THREE, terrainVert, terrainFrag, texture ) {
+define( ["three", "shader!atmosphere.vert", "shader!atmosphere.frag", "shader!terrain.vert", "shader!terrain.frag", "texture"],
+function ( THREE, atomsphereVert, atomsphereFrag, terrainVert, terrainFrag, texture ) {
   return {
+    atmosphere: new THREE.ShaderMaterial( {
+      uniforms: {
+        uHorizonColor: { type: "c", value: new THREE.Color( 0xfff1d8 ) },
+        uSkyColor: { type: "c", value: new THREE.Color( 0xd1e3f1 ) }
+      },
+      vertexShader: atomsphereVert.value,
+      fragmentShader: atomsphereFrag.value,
+      side: THREE.BackSide
+    } ),
     sky: new THREE.MeshBasicMaterial( {
-      fog: true,
+      //fog: true,
       map: texture.sky,
       side: THREE.DoubleSide
     } ),
@@ -21,7 +30,8 @@ function ( THREE, terrainVert, terrainFrag, texture ) {
           uScale: { type: "f", value: scale }
         },
         vertexShader: terrainVert.value,
-        fragmentShader: terrainFrag.value
+        fragmentShader: terrainFrag.value,
+        transparent: true
       } );
     }
   };

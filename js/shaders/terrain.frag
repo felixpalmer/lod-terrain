@@ -41,7 +41,7 @@ vec3 getNormal() {
 
 void main() {
   // Base color
-  vec3 light = vec3(80.0, 150.0, 50.0);
+  vec3 light = vec3(0.0, 850.0, 50.0);
   //vec3 color = colorForScale(uScale);
   vec3 normal = getNormal();
 
@@ -50,8 +50,8 @@ void main() {
 
   // Snow stick determines effect of normal on presence of snow
   float snowStick = dot( vec3( 0, 0, 1.0 ), normal );
-  snowStick = pow( snowStick, 12.0 );
-  snowStick = step( 0.1, snowStick );
+  snowStick = pow( snowStick, 3.0 );
+  snowStick = step( 0.2, snowStick );
   float snowAlt = 20.0;
 
   vec3 grass = texture2D( uGrass, texScale * vPosition.xy ).rgb;
@@ -84,10 +84,11 @@ void main() {
 
   // Add height fog
   float fogFactor = clamp( 1.0 - vPosition.z / 155.0, 0.0, 1.0 );
-  fogFactor = 0.6 * pow( fogFactor, 5.4 );
+  fogFactor = 0.96 * pow( fogFactor, 5.4 );
   float fogAngle = dot( normalize( cameraPosition - vPosition ), normalize( vPosition - light ) );
   fogAngle = smoothstep( 0.0, 1.0, fogAngle );
-  vec3 fogColor = mix( vec3( 0.91, 0.98, 1.0 ), vec3( 0.98, 0.77, 0.33), fogAngle );
+  //vec3 fogColor = mix( vec3( 0.86, 0.95, 1.0 ), vec3( 0.98, 0.77, 0.33), fogAngle );
+  vec3 fogColor = vec3( 0.86, 0.95, 1.0 );
   color = mix( color, fogColor, fogFactor );
 
   // Add distance fog

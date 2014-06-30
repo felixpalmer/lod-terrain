@@ -21,32 +21,17 @@ float getHeight( vec3 p ) {
   return h * h / 2000.0;
 }
 
-vec3 getNormal() {
-  // Differentiate the position vector (this will give us two vectors perpendicular to the surface)
-  // Before differentiating, add the displacement based on the height from the height map. By doing this
-  // calculation here, rather than in the vertex shader, we get a per-fragment calculated normal, rather
-  // than a per-vertex normal. This improves the look of distant low-vertex terrain.
-  float height = getHeight( vPosition );
-  vec3 p = vec3(vPosition.xy, height);
-  vec3 dPositiondx = dFdx(p);
-  vec3 dPositiondy = dFdy(p);
-
-  // The normal is the cross product of the differentials
-  return normalize(cross(dPositiondx, dPositiondy));
-}
-
 void main() {
   // Base color
-  vec3 light = vec3(0.0, 850.0, 50.0);
+  vec3 light = vec3( 400.0, 850.0, 50.0 );
   //vec3 color = colorForScale(uScale);
-  vec3 normal = getNormal();
 
   // Combine textures based on height and normal (use rougher normal from vertex shader)
   float texScale = 0.03;
 
   // Grass stick determines effect of normal on presence of grass
   float grassStick = dot( vec3( 0, 0, 1.0 ), vNormal );
-  grassStick = pow( grassStick, 2.5 );
+  grassStick = pow( grassStick, 3.0 );
   grassStick = step( 0.2, grassStick );
 
   vec3 water = vec3( 0.23, 0.08, 0.345 );
@@ -65,7 +50,7 @@ void main() {
 
   // Add height fog
   float fogFactor = smoothstep( 10.0, 8.0, vPosition.z );
-  fogFactor = 0.83 * pow( fogFactor, 1.4 );
+  fogFactor = 0.93 * pow( fogFactor, 1.4 );
   //vec3 fogColor = mix( vec3( 0.86, 0.95, 1.0 ), vec3( 0.98, 0.77, 0.33), fogAngle );
   vec3 fogColor = vec3( 0.0, 0.6 + 0.4 * smoothstep( 3.0, 10.0, vPosition.z ), 0.935 );
   color = mix( color, fogColor, fogFactor );

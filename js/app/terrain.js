@@ -128,6 +128,8 @@ define( ["three", "geometry", "shader!terrain.vert", "shader!terrain.frag", "sha
       tile.material.fragmentShader = this.fragShader.value;
       tile.material.needsUpdate = true;
     }
+
+    return f;
   };
 
   return Terrain;

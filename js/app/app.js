@@ -30,11 +30,22 @@ function ( THREE, camera, container, controls, geometry, material, noise, render
       } );
 
       container.addEventListener( 'click', function() {
-        // Switch between snowy and 'Mordor' terrains
-        app.sky.visible = !app.sky.visible;
-        app.sky2.visible = !app.sky2.visible;
-
-        app.terrain.cycleShader();
+        // Switch between different frag shaders
+        var s = app.terrain.cycleShader();
+        if ( s === 0 ) {
+          app.sky.visible = true;
+          app.sky2.visible = false;
+        } else {
+          app.sky.visible = false;
+          app.sky2.visible = true;
+          if ( s === 1 ) {
+            material.atmosphere.uniforms.uHorizonColor.value = new THREE.Color( 0xfff1d8 );
+            material.atmosphere.uniforms.uSkyColor.value = new THREE.Color( 0xf9f9ff );
+          } else {
+            material.atmosphere.uniforms.uHorizonColor.value = new THREE.Color( 0xffffff );
+            material.atmosphere.uniforms.uSkyColor.value = new THREE.Color( 0x55b9ff );
+          }
+        }
       } );
     },
  //   height: function() {

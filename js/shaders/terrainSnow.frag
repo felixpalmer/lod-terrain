@@ -67,7 +67,7 @@ void main() {
   // Incident light (generate shadows and highlights)
   float incidence = dot(normalize(light - vPosition), vNormal);
   incidence = clamp(incidence, 0.0, 1.0);
-  float shadowFactor = pow(incidence, 0.02);
+  float shadowFactor = pow(incidence, 0.72);
   shadowFactor = 0.4 + 0.6 * shadowFactor;
   color = mix( vec3( 0, 0, 0 ), color, shadowFactor );
   color = mix( color, vec3( 0.81, 0.9, 1.0 ), 0.2 * shadowFactor );

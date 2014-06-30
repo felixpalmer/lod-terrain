@@ -72,8 +72,8 @@ void main() {
 
   // Add distance fog
   float depth = gl_FragCoord.z / gl_FragCoord.w;
-  fogFactor = smoothstep( 300.0, 1000.0, depth );
-  fogColor = vec3( 1.0, 0.945, 0.847 );
+  fogFactor = smoothstep( 500.0, 1200.0, depth );
+  fogColor = vec3( 0.8, 0.945, 1.0 );
   color = mix( color, fogColor, fogFactor );
 
   gl_FragColor = vec4(color, 1.0 - fogFactor);

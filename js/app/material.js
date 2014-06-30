@@ -1,5 +1,5 @@
-define( ["three", "shader!atmosphere.vert", "shader!atmosphere.frag", "shader!terrain.vert", "shader!terrain.frag", "texture"],
-function ( THREE, atomsphereVert, atomsphereFrag, terrainVert, terrainFrag, texture ) {
+define( ["three", "shader!atmosphere.vert", "shader!atmosphere.frag", "shader!terrain.vert", "shader!terrain.frag", "shader!terrainSnow.frag", "texture"],
+function ( THREE, atomsphereVert, atomsphereFrag, terrainVert, terrainFrag, terrainSnowFrag, texture ) {
   return {
     atmosphere: new THREE.ShaderMaterial( {
       uniforms: {
@@ -31,7 +31,7 @@ function ( THREE, atomsphereVert, atomsphereFrag, terrainVert, terrainFrag, text
           uScale: { type: "f", value: scale }
         },
         vertexShader: terrainVert.value,
-        fragmentShader: terrainFrag.value,
+        fragmentShader: terrainSnowFrag.value,
         transparent: true
       } );
     }

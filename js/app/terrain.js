@@ -1,4 +1,4 @@
-define( ["three", "geometry", "shader!terrain.vert", "shader!terrain.frag", "shader!terrainSnow.frag", "texture"], function ( THREE, geometry, terrainVert, terrainFrag, terrainSnowFrag, texture ) {
+define( ["three", "geometry", "shader!terrain.vert", "shader!terrain.frag", "shader!terrainSnow.frag", "shader!terrainToon.frag", "texture"], function ( THREE, geometry, terrainVert, terrainFrag, terrainSnowFrag, terrainToonFrag, texture ) {
   // Tiles that sit next to a tile of a greater scale need to have their edges morphed to avoid
   // edges. Mark which edges need morphing using flags. These flags are then read by the vertex
   // shader which performs the actual morph
@@ -24,6 +24,7 @@ define( ["three", "geometry", "shader!terrain.vert", "shader!terrain.frag", "sha
     this.offset = new THREE.Vector3( 0, 0, 0 );
 
     // Which shader should be used for rendering
+    this.fragShaders = [terrainFrag, terrainSnowFrag, terrainToonFrag];
     this.fragShader = terrainSnowFrag;
 
     // Create geometry that we'll use for each tile, just a standard plane
@@ -103,9 +104,9 @@ define( ["three", "geometry", "shader!terrain.vert", "shader!terrain.frag", "sha
         uEdgeMorph: { type: "i", value: edgeMorph },
         uGlobalOffset: { type: "v3", value: globalOffset },
         uHeightData: { type: "t", value: heightData },
-        uGrass: { type: "t", value: texture.grass },
+        //uGrass: { type: "t", value: texture.grass },
         uRock: { type: "t", value: texture.rock },
-        uSnow: { type: "t", value: texture.snow },
+        //uSnow: { type: "t", value: texture.snow },
         uTileOffset: { type: "v2", value: offset },
         uScale: { type: "f", value: scale }
       },
@@ -116,8 +117,10 @@ define( ["three", "geometry", "shader!terrain.vert", "shader!terrain.frag", "sha
   };
 
   Terrain.prototype.cycleShader = function() {
-    // Swap between snow and 'Mordor'
-    this.fragShader = this.fragShader === terrainFrag ? terrainSnowFrag : terrainFrag;
+    // Swap between different terrains
+    var f = this.fragShaders.indexOf( this.fragShader );
+    f = ( f + 1 ) % this.fragShaders.length;
+    this.fragShader = this.fragShaders[f];
 
     // Update all tiles
     for ( var c in this.children ) {

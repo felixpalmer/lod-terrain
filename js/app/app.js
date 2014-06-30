@@ -23,7 +23,8 @@ function ( THREE, camera, container, controls, geometry, material, noise, render
       container.addEventListener( 'mousemove', function( e ) {
         app.mouse = {
           x: e.clientX - container.offsetWidth / 2,
-          y: container.offsetHeight - e.clientY
+          // Square to give more sensitivity at bottom of screen
+          y: Math.pow( container.offsetHeight - e.clientY, 2 ) / container.offsetHeight
         };
       } );
     },

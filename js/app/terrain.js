@@ -1,4 +1,4 @@
-define( ["three", "geometry", "material"], function ( THREE, geometry, material ) {
+define( ["three", "geometry", "shader!terrain.vert", "shader!terrain.frag", "shader!terrainSnow.frag", "texture"], function ( THREE, geometry, terrainVert, terrainFrag, terrainSnowFrag, texture ) {
   // Tiles that sit next to a tile of a greater scale need to have their edges morphed to avoid
   // edges. Mark which edges need morphing using flags. These flags are then read by the vertex
   // shader which performs the actual morph
@@ -82,14 +82,34 @@ define( ["three", "geometry", "material"], function ( THREE, geometry, material 
   Terrain.prototype = Object.create( THREE.Object3D.prototype );
 
   Terrain.prototype.createTile = function ( x, y, scale, edgeMorph ) {
-    var terrainMaterial = material.createTerrainMaterial( this.heightData,
-                                                          this.offset,
-                                                          new THREE.Vector2( x, y ),
-                                                          scale,
-                                                          this.resolution,
-                                                          edgeMorph );
+    var terrainMaterial = this.createTerrainMaterial( this.heightData,
+                                                      this.offset,
+                                                      new THREE.Vector2( x, y ),
+                                                      scale,
+                                                      this.resolution,
+                                                      edgeMorph );
     var plane = new THREE.Mesh( this.tileGeometry, terrainMaterial );
     this.add( plane );
+  };
+
+  Terrain.prototype.createTerrainMaterial = function( heightData, globalOffset, offset, scale, resolution, edgeMorph ) {
+    // Is it bad to change this for every tile?
+    terrainVert.define( "TILE_RESOLUTION", resolution.toFixed(1) );
+    return new THREE.ShaderMaterial( {
+      uniforms: {
+        uEdgeMorph: { type: "i", value: edgeMorph },
+        uGlobalOffset: { type: "v3", value: globalOffset },
+        uHeightData: { type: "t", value: heightData },
+        uGrass: { type: "t", value: texture.grass },
+        uRock: { type: "t", value: texture.rock },
+        uSnow: { type: "t", value: texture.snow },
+        uTileOffset: { type: "v2", value: offset },
+        uScale: { type: "f", value: scale }
+      },
+      vertexShader: terrainVert.value,
+      fragmentShader: terrainSnowFrag.value ,
+      transparent: true
+    } );
   };
 
   return Terrain;

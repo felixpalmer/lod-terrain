@@ -10,14 +10,15 @@ function ( THREE, camera, container, controls, geometry, material, noise, render
       scene.add( app.terrain );
 
       // Add sky
-      var sky = new THREE.Mesh( geometry.sky, material.sky );
-      sky.position.z = 150;
-      //scene.add( sky );
+      app.sky = new THREE.Mesh( geometry.sky, material.sky );
+      app.sky.position.z = 250;
+      app.sky.visible = false;
+      scene.add( app.sky );
       
       /// Add sky2
-      var sky2 = new THREE.Mesh( geometry.sky2, material.atmosphere );
-      sky2.position.z = -1000;
-      scene.add( sky2 );
+      app.sky2 = new THREE.Mesh( geometry.sky2, material.atmosphere );
+      app.sky2.position.z = -1000;
+      scene.add( app.sky2 );
 
       // Mouse input
       container.addEventListener( 'mousemove', function( e ) {
@@ -26,6 +27,14 @@ function ( THREE, camera, container, controls, geometry, material, noise, render
           // Square to give more sensitivity at bottom of screen
           y: Math.pow( container.offsetHeight - e.clientY, 2 ) / container.offsetHeight
         };
+      } );
+
+      container.addEventListener( 'click', function() {
+        // Switch between snowy and 'Mordor' terrains
+        app.sky.visible = !app.sky.visible;
+        app.sky2.visible = !app.sky2.visible;
+
+        app.terrain.cycleShader();
       } );
     },
  //   height: function() {

@@ -23,6 +23,9 @@ define( ["three", "geometry", "shader!terrain.vert", "shader!terrain.frag", "sha
     // nearest to the camera. In the future, should calculate required detail level per tile
     this.offset = new THREE.Vector3( 0, 0, 0 );
 
+    // Which shader should be used for rendering
+    this.fragShader = terrainSnowFrag;
+
     // Create geometry that we'll use for each tile, just a standard plane
     this.tileGeometry = new THREE.PlaneGeometry( 1, 1, this.resolution, this.resolution );
     // Place origin at bottom left corner, rather than center
@@ -107,9 +110,21 @@ define( ["three", "geometry", "shader!terrain.vert", "shader!terrain.frag", "sha
         uScale: { type: "f", value: scale }
       },
       vertexShader: terrainVert.value,
-      fragmentShader: terrainSnowFrag.value ,
+      fragmentShader: this.fragShader.value,
       transparent: true
     } );
+  };
+
+  Terrain.prototype.cycleShader = function() {
+    // Swap between snow and 'Mordor'
+    this.fragShader = this.fragShader === terrainFrag ? terrainSnowFrag : terrainFrag;
+
+    // Update all tiles
+    for ( var c in this.children ) {
+      var tile = this.children[c];
+      tile.material.fragmentShader = this.fragShader.value;
+      tile.material.needsUpdate = true;
+    }
   };
 
   return Terrain;

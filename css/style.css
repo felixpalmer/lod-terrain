@@ -2,54 +2,49 @@
 
 html {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 24px;
+  font-size: 20px;
   line-height: 1.2;
-  color: #444;
-  text-shadow: black 5px 5px 10px;
-  text-align: center;
+  color: #fff;
 }
 
-body {
+html, body, #container {
+  height: 100%;
+  width: 100%;
   margin: 0;
 }
 
-h1 {
-  font-size: 70px;
+p {
+  margin: 0 0 10px 0;
 }
 
-#title {
+#share-container {
   position: absolute;
-  z-index: 100;
-  top: 20px;
-  left: 80px;
-}
-
-#bloglink {
-  position: absolute;
-  z-index: 100;
-  top: 160px;
-  left: 80px;
-  color: white;
-}
-
-/* threejs container styles */
-#example-container {
-  position: absolute;
-  height: 100%;
-  width: 100%;
   top: 0;
-  left: 0;
-  background:#111;
-  min-height: 600px;
-  min-width: 800px;
+  background: #000;
+  opacity: 0.8;
+  color: #fff;
+  padding: 10px;
+  padding-left: 20px;
+  height: 120px;
+  width: 100%;
+}
+
+#share-container h1 {
+  float: left;
+  margin: 0 auto;
+  padding-right: 30px;
+}
+
+#share-container p {
+  padding-top: 6px;
+  font-size: 12px;
 }
 
 #threejs-container {
-  position: relative;
-  background:#000;
+  background: #000;
   color: #666;
-  text-align: center;
   height: 100%;
+  width: 100%;
 }
 
 #threejs-container canvas {

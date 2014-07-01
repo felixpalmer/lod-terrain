@@ -8,7 +8,8 @@ LOD Terrain is an example of how to render a terrain with a variable level of de
 
 [Try out the live demo here](http://felixpalmer.github.io/lod-terrain)
 ![](https://github.com/felixpalmer/lod-terrain/raw/master/screenshots/screenshot1.png)
-![](https://github.com/felixpalmer/lod-terrain/raw/master/screenshots/screenshot2.png)
+![](https://github.com/felixpalmer/lod-terrain/raw/master/screenshots/screenshot4.png)
+![](https://github.com/felixpalmer/lod-terrain/raw/master/screenshots/screenshot5.png)
 
 Height calculations
 ===================

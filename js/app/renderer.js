@@ -7,6 +7,9 @@ define( ["three", "container"], function ( THREE, container ) {
 
   var updateSize = function () {
     renderer.setSize( container.offsetWidth, container.offsetHeight );
+    
+    // For a smoother render double the pixel ratio
+    renderer.setPixelRatio( 2 );
   };
   window.addEventListener( 'resize', updateSize, false );
   updateSize();

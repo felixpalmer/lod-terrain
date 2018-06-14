@@ -26,6 +26,9 @@ define( ["three", "ImprovedNoise"], function ( THREE, ImprovedNoise ) {
   var noise = new THREE.DataTexture( data, width, width, THREE.AlphaFormat );
   noise.wrapS = THREE.MirroredRepeatWrapping;
   noise.wrapT = THREE.MirroredRepeatWrapping;
+  noise.magFilter = THREE.LinearFilter;
+  noise.minFilter = THREE.LinearMipMapLinearFilter;
+  noise.generateMipmaps = true;
   noise.needsUpdate = true;
   return noise;
 } );

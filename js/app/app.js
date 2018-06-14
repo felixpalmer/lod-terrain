@@ -1,5 +1,5 @@
-define( ["three", "camera", "container", "controls", "geometry", "material", "noise", "renderer", "scene", "terrain"],
-function ( THREE, camera, container, controls, geometry, material, noise, renderer, scene, Terrain ) {
+define( ["three", "camera", "container", "geometry", "material", "noise", "renderer", "scene", "terrain"],
+function ( THREE, camera, container, geometry, material, noise, renderer, scene, Terrain ) {
   var app = {
     clock: new THREE.Clock(),
     mouse: { x: 0, y: 0 },
